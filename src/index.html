@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notulen Generator</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Karang Taruna Tools</p>
+        <h1>Generator Notulen</h1>
+        <p class="subtitle">
+          Masukkan catatan mentah rapat, lalu AI akan merapikan menjadi format notulen:
+          absensi, poin pembahasan, dan agenda selanjutnya.
+        </p>
+      </div>
+
+      <div class="hero-card">
+        <span class="status-dot"></span>
+        <div>
+          <strong>Format output</strong>
+          <p>JSON terstruktur untuk template GDOCX</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="panel input-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Input Catatan Rapat</h2>
+          </div>
+        </div>
+
+        <label for="rawInput">Catatan mentah</label>
+        <textarea id="rawInput" placeholder="Contoh:
+1. bulan Juni ada 2x seminar sebelum mba Wid nikah
+2. awal Juni ada seminar tentang public speaking dan penyeluruhan bersama karang taruna rw01 di kelurahan (tanggal 06-06-2026) 
+3. 14 Juni 2026 pernikahan mba Widia 
+4. akhir Juni ada seminar dr mahasiswa Udinus (seminar 27 Juni 2026)  
+5. Awal Juli menyelenggarakan malam ke akraban pada tanggal 4-5 juli 2026 (menyesuaikan)
+6. Agustus menyiapkan proker" yang harus kita siapkan"></textarea>
+        <div class="actions">
+          <button id="parseBtn" class="btn primary">Parse dengan AI</button>
+          <button id="sampleBtn" class="btn ghost">Isi Contoh</button>
+          <button id="clearBtn" class="btn danger">Reset</button>
+        </div>
+
+        <!-- <div class="hint">
+          Backend endpoint yang dipakai: <code>/api/parse-notulen</code>
+        </div> -->
+      </div>
+
+      <div class="panel output-panel">
+        <div class="panel-header split">
+          <div>
+            <h2>Preview Notulen</h2>
+            <p>Data hasil parsing bisa dicek sebelum dibuat dokumen.</p>
+          </div>
+        </div>
+
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">📄</div>
+          <h3>Belum ada preview</h3>
+          <p>Masukkan catatan rapat lalu klik parse. Tragis memang, tombol harus diklik dulu.</p>
+        </div>
+
+        <div id="preview" class="preview hidden">
+          <div class="doc-title">
+            <h3 id="previewJudul"></h3>
+            <p id="previewAgenda"></p>
+          </div>
+
+          <div class="meta-grid">
+            <div>
+              <label for="editTanggal">Hari / Tanggal</label>
+              <input
+                id="editTanggal"
+                class="meta-input"
+                type="text"
+                placeholder="Contoh: Jumat, 08 Mei 2026"
+              />
+            </div>
+
+            <div>
+              <label for="editWaktu">Waktu</label>
+              <input
+                id="editWaktu"
+                class="meta-input"
+                type="text"
+                placeholder="Contoh: 19.00 - 21.00"
+              />
+            </div>
+
+            <div>
+              <label for="editTempat">Tempat</label>
+              <input
+                id="editTempat"
+                class="meta-input"
+                type="text"
+                placeholder="Contoh: Balai RW 01"
+              />
+            </div>
+          </div>
+
+          <section class="preview-section">
+            <h4>1. Absensi Anggota</h4>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Hadir</th>
+                    <th>Tidak Hadir</th>
+                  </tr>
+                </thead>
+                <tbody id="absensiBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4>2. Poin Pembahasan Rapat</h4>
+            <div id="pembahasanList" class="discussion-list"></div>
+          </section>
+
+          <section class="preview-section">
+            <h4>3. Agenda Selanjutnya</h4>
+            <p id="agendaList" class="agenda-paragraph"></p>
+          </section>
+
+          <section class="preview-section">
+            <h4>Raw JSON</h4>
+            <pre id="jsonOutput"></pre>
+          </section>
+        </div>
+        <button id="generateBtn" class="btn success" disabled>
+            Download PDF
+          </button>
+        <div id="docResult" class="doc-result hidden"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
